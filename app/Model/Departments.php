@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Departments extends Model
 {
     protected $fillable = [
-        'name', 'nivel', 'employees_quantity', 'ambassador_id'
+        'id','name', 'nivel', 'employees_quantity', 'ambassador_id'
     ];
 }
