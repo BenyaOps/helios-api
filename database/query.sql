@@ -4,6 +4,6 @@ CREATE TABLE departments (
     superior_id INT,
     nivel INT UNSIGNED NOT NULL,
     employees_quantity INT UNSIGNED NOT NULL,
-    ambassador VARCHAR(255),
+    ambassador_name VARCHAR(255),
     FOREIGN KEY (superior_id) REFERENCES departments(id)
 );

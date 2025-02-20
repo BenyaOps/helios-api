@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(array('prefix' => 'departments'), function () {
+    Route::get('/', ["as" => "index_departments", "uses" => "DepartmentsController@index"]);
+    Route::get('list', ["as" => "list_departments", "uses" => "DepartmentsController@list"]);
 });
