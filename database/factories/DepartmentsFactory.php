@@ -11,5 +11,6 @@ $factory->define(Departments::class, function (Faker $faker) {
         'nivel' => $faker->numberBetween(1, 20),
         'employees_quantity' => rand(1, 50),
         'ambassador_id' => $faker->numberBetween(1, 5),
+        'superior_id' => $faker->numberBetween(1, 10),
     ];
 });
