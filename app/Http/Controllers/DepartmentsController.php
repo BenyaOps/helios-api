@@ -40,6 +40,10 @@ class DepartmentsController extends Controller
              'departments.superior_id', 'departments.nivel', 'departments.employees_quantity',
              'ambassadors.name as ambassador_name',
              DB::raw('COUNT(sub_departments.id) as sub_departments_count')]);
+        $query->map(function ($department) {
+            $department->superior_name = Departments::where('id', $department->superior_id)->value('name');
+            return $department;
+        });
         //var_dump($query);die();
 
         $data = [];
