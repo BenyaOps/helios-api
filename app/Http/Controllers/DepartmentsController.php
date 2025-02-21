@@ -16,9 +16,13 @@ class DepartmentsController extends Controller
     public function list(Request $request)
     {
         $orderColum = $request->query('order_column', 'department_id');
+        $filter_column_name = $request->query('filter_column_name', 'name');
         $validColumns = ['name', 'employees_quantity', 'ambassor_id', 'nivel','department_id', 'department_name'];
         if (!in_array($orderColum, $validColumns)) {
             return response()->json(['error' => 'Columna de ordenamiento no válida'], 400);
+        }
+        if ($filter_column_name && !in_array($filter_column_name, $validColumns)) {
+            return response()->json(['error' => 'Columna de filtro no válida'], 400);
         }
         $order = $request->query('order', 'desc');
         $page = $request->query('page', 1);
@@ -31,11 +35,12 @@ class DepartmentsController extends Controller
         ->groupBy('departments.id', 'departments.name', 'departments.superior_id',
               'departments.nivel', 'departments.employees_quantity',
               'ambassadors.name')
+        ->when($searchName, function ($query, $searchName) use ($filter_column_name) {
+            return $query->where('departments.'.$filter_column_name, 'like', '%' . $searchName . '%');
+        })
+        ->orderBy($orderColum, $order)
         ->limit($itemsPerPage)
         ->offset($offset)
-        ->when($searchName, function ($query, $searchName) {
-            return $query->where('departments.name', 'like', '%' . $searchName . '%');
-        })
         ->get(['departments.id as department_id', 'departments.name as department_name',
              'departments.superior_id', 'departments.nivel', 'departments.employees_quantity',
              'ambassadors.name as ambassador_name',
@@ -49,6 +54,7 @@ class DepartmentsController extends Controller
         $data = [];
         $data['departments'] = $query;
         $data['total'] = Departments::count();
+        $data['total_employee'] = Departments::sum('employees_quantity');
         $data['page'] = $page;
         $data['itemsPerPage'] = $itemsPerPage;
         return  $this->response(200, 'SUCCESSFUL', $data);
