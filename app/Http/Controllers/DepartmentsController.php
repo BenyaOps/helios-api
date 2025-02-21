@@ -17,12 +17,15 @@ class DepartmentsController extends Controller
     {
         $orderColum = $request->query('order_column', 'department_id');
         $filter_column_name = $request->query('filter_column_name', 'name');
-        $validColumns = ['name', 'employees_quantity', 'ambassor_id', 'nivel','department_id', 'department_name'];
+        $validColumns = ['name', 'employees_quantity', 'ambassor_id', 'nivel','department_id', 'department_name', 'sub_departments_count'];
         if (!in_array($orderColum, $validColumns)) {
             return response()->json(['error' => 'Columna de ordenamiento no válida'], 400);
         }
         if ($filter_column_name && !in_array($filter_column_name, $validColumns)) {
             return response()->json(['error' => 'Columna de filtro no válida'], 400);
+        }
+        if($filter_column_name == 'sub_departments_count'){
+            $filter_column_name = 'sub_departments.id';
         }
         $order = $request->query('order', 'desc');
         $page = $request->query('page', 1);

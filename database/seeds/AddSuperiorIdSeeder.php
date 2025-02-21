@@ -11,6 +11,6 @@ class AddSuperiorIdSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Model\Departments::class, 20)->create();
+        factory(App\Model\Departments::class, 100)->create();
     }
 }
